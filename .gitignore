@@ -32,3 +32,4 @@ go.work.sum
 # .vscode/
 2025-*.txt
 2026-*.txt
+bin/node-planner

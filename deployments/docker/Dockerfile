@@ -1,35 +1,26 @@
 # Multi-stage Dockerfile for dago-node-planner
 
 # Build stage
-FROM golang:1.23-alpine AS builder
-
-# Install build dependencies
-RUN apk add --no-cache git ca-certificates tzdata
+FROM golang:1.25.5-alpine AS builder
 
 # Set working directory
 WORKDIR /build
 
 # Copy go mod files
 COPY go.mod go.sum ./
-
-# Download dependencies
 RUN go mod download
 
 # Copy source code
 COPY . .
 
-# Build the binary
-ARG VERSION=dev
-ARG BUILD_TIME
-ARG GIT_COMMIT
-
+# Build binary
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
-    -ldflags="-w -s -X main.version=${VERSION} -X main.buildTime=${BUILD_TIME} -X main.gitCommit=${GIT_COMMIT}" \
-    -o /build/node-planner \
+    -ldflags="-w -s" \
+    -o node-planner \
     ./cmd/node-planner
 
 # Runtime stage
-FROM alpine:3.19
+FROM alpine:3.23
 
 # Install runtime dependencies
 RUN apk add --no-cache ca-certificates tzdata
