@@ -42,7 +42,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Failed to initialize logger: %v\n", err)
 		os.Exit(1)
 	}
-	defer logger.Sync()
+	defer func() { _ = logger.Sync() }()
 
 	logger.Info("starting dago-node-planner",
 		zap.String("version", version),

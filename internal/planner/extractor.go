@@ -129,12 +129,13 @@ func extractJSON(content string) string {
 			continue
 		}
 
-		if ch == '{' {
+		switch ch {
+		case '{':
 			if depth == 0 {
 				start = i
 			}
 			depth++
-		} else if ch == '}' {
+		case '}':
 			depth--
 			if depth == 0 && start > 0 {
 				jsonStr := content[start : i+1]

@@ -128,7 +128,7 @@ func (c *Config) applyEnvVars() {
 		c.Server.Host = v
 	}
 	if v := os.Getenv("PLANNER_SERVER_PORT"); v != "" {
-		fmt.Sscanf(v, "%d", &c.Server.Port)
+		_, _ = fmt.Sscanf(v, "%d", &c.Server.Port)
 	}
 
 	if v := os.Getenv("PLANNER_LLM_PROVIDER"); v != "" {
@@ -141,17 +141,17 @@ func (c *Config) applyEnvVars() {
 		c.LLM.Model = v
 	}
 	if v := os.Getenv("PLANNER_LLM_MAX_TOKENS"); v != "" {
-		fmt.Sscanf(v, "%d", &c.LLM.MaxTokens)
+		_, _ = fmt.Sscanf(v, "%d", &c.LLM.MaxTokens)
 	}
 	if v := os.Getenv("PLANNER_LLM_TEMPERATURE"); v != "" {
-		fmt.Sscanf(v, "%f", &c.LLM.Temperature)
+		_, _ = fmt.Sscanf(v, "%f", &c.LLM.Temperature)
 	}
 
 	if v := os.Getenv("PLANNER_MAX_ITERATIONS"); v != "" {
-		fmt.Sscanf(v, "%d", &c.Planning.MaxIterations)
+		_, _ = fmt.Sscanf(v, "%d", &c.Planning.MaxIterations)
 	}
 	if v := os.Getenv("PLANNER_MAX_NODES"); v != "" {
-		fmt.Sscanf(v, "%d", &c.Planning.MaxNodes)
+		_, _ = fmt.Sscanf(v, "%d", &c.Planning.MaxNodes)
 	}
 	if v := os.Getenv("PLANNER_PROMPT_PATH"); v != "" {
 		c.Planning.PromptPath = v

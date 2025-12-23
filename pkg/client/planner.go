@@ -57,7 +57,7 @@ func (c *Client) Plan(ctx context.Context, req *models.PlanRequest) (*models.Pla
 	if err != nil {
 		return nil, fmt.Errorf("request failed: %w", err)
 	}
-	defer httpResp.Body.Close()
+	defer func() { _ = httpResp.Body.Close() }()
 
 	if httpResp.StatusCode != http.StatusOK {
 		bodyBytes, _ := io.ReadAll(httpResp.Body)
@@ -96,7 +96,7 @@ func (c *Client) Validate(ctx context.Context, graphJSON string) (*models.Valida
 	if err != nil {
 		return nil, fmt.Errorf("request failed: %w", err)
 	}
-	defer httpResp.Body.Close()
+	defer func() { _ = httpResp.Body.Close() }()
 
 	if httpResp.StatusCode != http.StatusOK {
 		bodyBytes, _ := io.ReadAll(httpResp.Body)
@@ -124,7 +124,7 @@ func (c *Client) Health(ctx context.Context) error {
 	if err != nil {
 		return fmt.Errorf("request failed: %w", err)
 	}
-	defer httpResp.Body.Close()
+	defer func() { _ = httpResp.Body.Close() }()
 
 	if httpResp.StatusCode != http.StatusOK {
 		return fmt.Errorf("health check failed with status %d", httpResp.StatusCode)
