@@ -1,0 +1,170 @@
+{
+  "request": {
+    "task": "Analyze customer feedback sentiment, categorize it, and route to the appropriate department. If sentiment is negative, escalate to manager.",
+    "context": {
+      "feedback_text": "The product quality is terrible and customer service was unhelpful."
+    },
+    "constraints": {
+      "max_nodes": 10,
+      "preferred_modes": ["agent", "llm"],
+      "available_tools": ["send_email", "create_ticket", "update_database"]
+    }
+  },
+  "expected_graph": {
+    "nodes": [
+      {
+        "id": "analyze_sentiment",
+        "type": "executor",
+        "config": {
+          "mode": "agent",
+          "prompt": "Analyze the sentiment of the customer feedback and extract key issues. Rate sentiment as positive, neutral, or negative (0-10 scale).",
+          "state_input_path": "$.feedback_text",
+          "state_output_path": "$.analysis",
+          "available_tools": []
+        }
+      },
+      {
+        "id": "categorize_feedback",
+        "type": "executor",
+        "config": {
+          "mode": "llm",
+          "prompt": "Categorize this feedback into one of: Product Quality, Customer Service, Pricing, Features, Other. Based on: $.analysis",
+          "state_output_path": "$.category"
+        }
+      },
+      {
+        "id": "sentiment_router",
+        "type": "router",
+        "config": {
+          "mode": "deterministic",
+          "routes": [
+            {
+              "condition": "$.analysis.sentiment_score < 4",
+              "target": "escalate_to_manager"
+            },
+            {
+              "condition": "$.category == 'Product Quality'",
+              "target": "route_to_product_team"
+            },
+            {
+              "condition": "$.category == 'Customer Service'",
+              "target": "route_to_support_team"
+            },
+            {
+              "condition": "true",
+              "target": "route_to_general_team"
+            }
+          ]
+        }
+      },
+      {
+        "id": "escalate_to_manager",
+        "type": "executor",
+        "config": {
+          "mode": "tool",
+          "tool_calls": [
+            {
+              "tool_name": "send_email",
+              "parameters": {
+                "to": "manager@company.com",
+                "subject": "Urgent: Negative Customer Feedback",
+                "body": "Negative feedback received. Category: $.category. Details: $.analysis"
+              }
+            },
+            {
+              "tool_name": "create_ticket",
+              "parameters": {
+                "priority": "high",
+                "category": "$.category",
+                "description": "$.feedback_text"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "route_to_product_team",
+        "type": "executor",
+        "config": {
+          "mode": "tool",
+          "tool_calls": [
+            {
+              "tool_name": "create_ticket",
+              "parameters": {
+                "assignee": "product-team",
+                "category": "$.category",
+                "description": "$.feedback_text"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "route_to_support_team",
+        "type": "executor",
+        "config": {
+          "mode": "tool",
+          "tool_calls": [
+            {
+              "tool_name": "create_ticket",
+              "parameters": {
+                "assignee": "support-team",
+                "category": "$.category",
+                "description": "$.feedback_text"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "route_to_general_team",
+        "type": "executor",
+        "config": {
+          "mode": "tool",
+          "tool_calls": [
+            {
+              "tool_name": "create_ticket",
+              "parameters": {
+                "assignee": "general-team",
+                "category": "$.category",
+                "description": "$.feedback_text"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "edges": [
+      {
+        "source": "analyze_sentiment",
+        "target": "categorize_feedback"
+      },
+      {
+        "source": "categorize_feedback",
+        "target": "sentiment_router"
+      },
+      {
+        "source": "sentiment_router",
+        "target": "escalate_to_manager",
+        "condition": "$.analysis.sentiment_score < 4"
+      },
+      {
+        "source": "sentiment_router",
+        "target": "route_to_product_team",
+        "condition": "$.category == 'Product Quality'"
+      },
+      {
+        "source": "sentiment_router",
+        "target": "route_to_support_team",
+        "condition": "$.category == 'Customer Service'"
+      },
+      {
+        "source": "sentiment_router",
+        "target": "route_to_general_team",
+        "condition": "default"
+      }
+    ],
+    "entry_point": "analyze_sentiment"
+  },
+  "description": "Complex graph with sentiment analysis, categorization, routing, and escalation logic"
+}

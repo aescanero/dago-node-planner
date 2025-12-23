@@ -1,0 +1,94 @@
+# Example configuration file for dago-node-planner
+# Copy this file to config.yaml and adjust values as needed
+
+server:
+  # Host to bind the HTTP server to
+  host: "0.0.0.0"
+
+  # Port for the HTTP server
+  port: 8080
+
+  # HTTP server timeouts
+  read_timeout: 30s
+  write_timeout: 30s
+
+llm:
+  # LLM provider: "anthropic" or "openai"
+  provider: "anthropic"
+
+  # API key for the LLM provider
+  # IMPORTANT: Use environment variable PLANNER_LLM_API_KEY instead of storing here
+  api_key: ""
+
+  # Model to use for planning
+  # Anthropic: claude-3-5-sonnet-20241022, claude-3-opus-20240229
+  # OpenAI: gpt-4, gpt-3.5-turbo (when supported)
+  model: "claude-3-5-sonnet-20241022"
+
+  # Maximum tokens for LLM responses
+  max_tokens: 4096
+
+  # Temperature (0.0 = deterministic, 1.0 = creative)
+  # Recommended: 0.0 for schema compliance
+  temperature: 0.0
+
+  # Timeout for LLM requests
+  timeout: 60s
+
+  # Retry configuration for LLM requests
+  retry:
+    # Maximum number of retry attempts
+    max_attempts: 3
+
+    # Initial delay before first retry
+    initial_delay: 1s
+
+    # Maximum delay between retries
+    max_delay: 10s
+
+    # Multiplier for exponential backoff
+    multiplier: 2.0
+
+planning:
+  # Maximum iterations for graph refinement
+  # Higher = more chances to fix validation errors
+  max_iterations: 3
+
+  # Maximum nodes allowed per graph
+  max_nodes: 50
+
+  # Path to prompt template files
+  prompt_path: "./prompts"
+
+  # Note: JSON schemas are embedded in dago-libs and loaded automatically
+
+  # Enable graph validation
+  enable_validation: true
+
+  # Enable task analysis before planning
+  enable_analysis: true
+
+  # Confidence threshold for accepting graphs (0.0-1.0)
+  # Currently not implemented
+  confidence_threshold: 0.8
+
+logging:
+  # Log level: debug, info, warn, error
+  level: "info"
+
+  # Log format: json, console
+  # Use json for production, console for development
+  format: "json"
+
+  # Output path: stdout, stderr, or file path
+  output_path: "stdout"
+
+# Environment variable overrides:
+# All settings can be overridden with environment variables using the PLANNER_ prefix
+#
+# Examples:
+#   export PLANNER_SERVER_PORT=9090
+#   export PLANNER_LLM_API_KEY=your-api-key
+#   export PLANNER_LLM_MODEL=claude-3-opus-20240229
+#   export PLANNER_MAX_ITERATIONS=5
+#   export PLANNER_LOG_LEVEL=debug

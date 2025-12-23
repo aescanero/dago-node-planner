@@ -1,0 +1,57 @@
+Generate an execution graph for the following task:
+
+**Task:**
+{{TASK}}
+
+{{ANALYSIS}}
+
+{{CONSTRAINTS}}
+
+**Schema Information:**
+{{SCHEMAS}}
+
+**Instructions:**
+
+1. Analyze the task to determine:
+   - What actions need to be performed
+   - What tools or capabilities are required
+   - Whether conditional routing is needed
+   - The optimal execution flow
+
+2. Design a graph that:
+   - Uses the minimum number of nodes necessary
+   - Chooses appropriate node types and modes
+   - Defines clear state transitions
+   - Handles expected scenarios
+
+3. For each executor node:
+   - Choose the appropriate mode (agent/llm/tool)
+   - Provide a clear, actionable prompt
+   - Define state output paths if needed
+   - Specify tools if using agent mode
+
+4. For each router node:
+   - Choose the appropriate mode (deterministic/llm/hybrid)
+   - Define routing conditions clearly
+   - Map conditions to edge targets
+
+5. Ensure the graph:
+   - Has a clear entry point
+   - Handles all logical paths
+   - Uses meaningful node IDs
+   - Validates against the schema
+
+**Response Format:**
+
+Provide your response as a JSON object with this structure:
+
+{
+  "reasoning": "Explain your graph design: why you chose these nodes, how they work together, and what the execution flow looks like",
+  "graph": {
+    "nodes": [...],
+    "edges": [...],
+    "entry_point": "node_id"
+  }
+}
+
+Make sure the graph JSON is complete and valid according to the schema.

@@ -1,0 +1,91 @@
+# Air configuration for live reload during development
+# Install air: go install github.com/cosmtrek/air@latest
+
+root = "."
+testdata_dir = "testdata"
+tmp_dir = "tmp"
+
+[build]
+  # Binary name
+  bin = "./tmp/main"
+
+  # Command to build
+  cmd = "go build -o ./tmp/main ./cmd/node-planner"
+
+  # Delay after build before running (ms)
+  delay = 1000
+
+  # Directories to exclude from watching
+  exclude_dir = ["assets", "tmp", "vendor", "testdata", "bin", "tests", ".git", ".github", "docs"]
+
+  # File extensions to exclude from watching
+  exclude_file = []
+
+  # Regexp patterns to exclude from watching
+  exclude_regex = ["_test.go"]
+
+  # Paths to exclude from watching (Unix-style)
+  exclude_unchanged = false
+
+  # Follow symbolic links
+  follow_symlink = false
+
+  # Watch these directories if you're in full_bin mode
+  full_bin = ""
+
+  # File extensions to include for watching
+  include_ext = ["go", "tpl", "tmpl", "html"]
+
+  # Include these files for watching
+  include_file = []
+
+  # Kill process before building
+  kill_delay = "0s"
+
+  # Log file for build errors
+  log = "build-errors.log"
+
+  # Poll for file changes instead of using filesystem events
+  poll = false
+
+  # Interval for polling (ms)
+  poll_interval = 0
+
+  # Add additional arguments when running binary (bin/full_bin)
+  args_bin = []
+
+  # Rerun binary after build errors
+  rerun = false
+
+  # Delay after receiving file change event (ms)
+  rerun_delay = 500
+
+  # Send interrupt signal before killing process
+  send_interrupt = false
+
+  # Stop running old binary when build errors occur
+  stop_on_error = false
+
+[color]
+  # Customize colors
+  app = ""
+  build = "yellow"
+  main = "magenta"
+  runner = "green"
+  watcher = "cyan"
+
+[log]
+  # Show log time
+  main_only = false
+  time = false
+
+[misc]
+  # Delete tmp directory on exit
+  clean_on_exit = true
+
+[screen]
+  # Clear screen on rebuild
+  clear_on_rebuild = true
+
+  # Keep scroll position
+  keep_scroll = true

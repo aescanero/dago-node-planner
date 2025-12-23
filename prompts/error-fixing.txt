@@ -1,0 +1,42 @@
+The previous graph had validation errors. Please fix them.
+
+**Original Task:**
+{{TASK}}
+
+**Previous Graph (Attempt {{ATTEMPT}}):**
+```json
+{{PREVIOUS_GRAPH}}
+```
+
+**Validation Errors:**
+{{VALIDATION_ERRORS}}
+
+**Instructions:**
+
+1. Carefully review each validation error
+2. Identify the root cause of each error
+3. Fix the errors while maintaining the original task intent
+4. Ensure the corrected graph is valid and executable
+
+Common validation errors and fixes:
+- Missing required fields: Add all required properties
+- Invalid node types: Use only "executor" or "router"
+- Invalid modes: Use valid modes for each node type
+- Invalid edge references: Ensure all edge source/target node IDs exist
+- Schema violations: Match the exact schema structure and types
+- Missing entry_point: Specify a valid entry point node ID
+
+**Response Format:**
+
+Provide your response as a JSON object:
+
+{
+  "reasoning": "Explain what was wrong and how you fixed it",
+  "graph": {
+    "nodes": [...],
+    "edges": [...],
+    "entry_point": "node_id"
+  }
+}
+
+The corrected graph must pass schema validation. Double-check all node IDs, edge connections, and required fields.

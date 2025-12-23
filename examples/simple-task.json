@@ -1,0 +1,37 @@
+{
+  "request": {
+    "task": "Send a welcome email to the new user",
+    "context": {
+      "user_email": "newuser@example.com",
+      "user_name": "John Doe"
+    },
+    "constraints": {
+      "max_nodes": 5,
+      "preferred_modes": ["tool"]
+    }
+  },
+  "expected_graph": {
+    "nodes": [
+      {
+        "id": "send_welcome_email",
+        "type": "executor",
+        "config": {
+          "mode": "tool",
+          "tool_calls": [
+            {
+              "tool_name": "send_email",
+              "parameters": {
+                "to": "$.user_email",
+                "subject": "Welcome!",
+                "body": "Welcome to our platform, $.user_name!"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "edges": [],
+    "entry_point": "send_welcome_email"
+  },
+  "description": "Simplest possible graph - single executor node in tool mode to send an email"
+}
